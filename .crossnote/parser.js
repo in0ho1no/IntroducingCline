@@ -79,6 +79,26 @@
       `,
     );
 
+    html_ = html_.replace(
+      /:::[uU][sS][eE][rR]([\w\W]+?):::/g, 
+      (whole, content) => `
+        \<p id="user"\>
+        👤User<br>
+        ${content}
+        \<\/p\>
+      `,
+    );
+
+    html_ = html_.replace(
+      /:::[cC][lL][iI][nN][eE]([\w\W]+?):::/g, 
+      (whole, content) => `
+        \<p id="cline"\>
+        🤖Cline<br>
+        ${content}
+        \<\/p\>
+      `,
+    );
+
     return html_;
   },
 })
