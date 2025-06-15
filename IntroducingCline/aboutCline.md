@@ -212,62 +212,83 @@ web_app/
 
 ## チーム運用のための設定ファイル化
 
-### 専用設定ファイルの作成
+### 背景と目的
 
-#### `.cline/project-context.md`
+従来のプロジェクトでは、ファイル名と実際の機能が一致しないことがよくあります。例えば、`temp.py`という名前でありながら実際は本番環境で動作する重要なコードであったり、`old_backup.py`という名前でありながら最新の実装が含まれていたりします。
+
+このような状況でClineを使用すると、ファイル名から機能を推測するため、重要なファイルを見落としたり、古いファイルを誤って選択したりする可能性があります。
+
+この問題を解決するため、**プロジェクト専用の設定ファイル**を作成することで、チーム全体が同じ前提知識でClineを効果的に活用できるようになります。
+
+### 設定ファイルの作成（以下はOCRソフト開発プロジェクトの例）
+
+#### プロジェクト情報ファイルの作成
+
+プロジェクトのルートフォルダに `.cline` というフォルダを作成し、その中に `プロジェクト説明.md` というファイルを作成します。
+
+#### `.cline/プロジェクト説明.md`
+
+ファイル名とファイルの中身が一致しないケースも考慮して、以下のように関連付けを明示しておきます。
 
 ```markdown
-# Project Context for Cline
+# OCRソフト開発プロジェクト - Cline用設定
 
-## Core Architecture
-- **Main Application**: `fizzbuzz.py` - OCR preprocessing engine
-- **Data Processing**: `temp_script.py` - Core OCR execution logic  
-- **Utilities**: `legacy_utils.py` - Active utility functions (NOT deprecated)
-- **Configuration**: `config/settings.py` - Runtime configuration
-- **Database**: `db_handler.py` - Main database interface
+## プロジェクト概要
+このプロジェクトは、画像から文字を認識するOCRソフトウェアを開発しています。
 
-## Important Files with Misleading Names
-- `backup_old.py` → **ACTIVE**: Latest authentication implementation
-- `test123.py` → **ACTIVE**: External API integration
-- `utils.py` → **ACTIVE**: Database access layer
-- `temp.py` → **ACTIVE**: Production payment processing
+## 主要ファイルの説明
+- **メイン処理**: `fizzbuzz.py` - OCR前処理エンジン（名前に惑わされないこと）
+- **データ処理**: `temp_script.py` - OCR実行の中核ロジック（一時ファイルではない）
+- **共通機能**: `legacy_utils.py` - 現在も使用中のユーティリティ関数（古いファイルではない）
+- **設定管理**: `config/settings.py` - 実行時設定ファイル
+- **データベース**: `db_handler.py` - メインのデータベース接続処理
 
-## Deprecated/Unused Files
-- `new_feature.py` - Old implementation, ignore
-- `database.py` - Legacy DB code, use `db_handler.py` instead
+## 注意が必要なファイル（名前と内容が一致しないもの）
+- `backup_old.py` → **現役**: 最新の認証処理実装
+- `test123.py` → **現役**: 外部API連携処理
+- `utils.py` → **現役**: データベースアクセス層
+- `temp.py` → **現役**: 本番環境の決済処理
 
-## Project-Specific Conventions
-- All OCR-related functions use `ocr_` prefix in function names
-- Database queries are in `queries/` subdirectory
-- API endpoints follow `/api/v2/` pattern
+## 使用しないファイル（古い実装）
+- `new_feature.py` - 古い実装、無視してください
+- `database.py` - 古いDB接続コード、`db_handler.py`を使用してください
 
-## Common Tasks
-- **Authentication**: Modify `backup_old.py`
-- **Database**: Use `db_handler.py` + `queries/*.sql`
-- **API**: Check `api_routes.py` + external integrations in `test123.py`
+## プロジェクト固有の規則
+- OCR関連の関数は全て `ocr_` で始まります
+- データベース検索は `queries/` フォルダ内のファイルを使用
+- API接続は `/api/v2/` パターンに従います
+
+## よくある作業と対応ファイル
+- **認証機能の修正**: `backup_old.py` を変更
+- **データベース処理**: `db_handler.py` と `queries/*.sql` を使用
+- **API関連**: `api_routes.py` と外部連携用の `test123.py` を確認
 ```
 
-#### `.vscode/settings.json`
+#### VSCode設定ファイル
+
+`.vscode/settings.json`に以下を追加します：
 
 ```json
 {
   "cline.contextFiles": [
-    ".cline/project-context.md",
+    ".cline/プロジェクト説明.md",
     "README.md",
     "ARCHITECTURE.md"
   ],
   "cline.alwaysInclude": [
-    ".cline/project-context.md"
+    ".cline/プロジェクト説明.md"
   ]
 }
 ```
 
-#### `cline.config.json`
+#### プロジェクト設定ファイル
+
+`cline.config.json`をプロジェクトルートに作成：
 
 ```json
 {
   "projectContext": {
-    "contextFile": ".cline/project-context.md",
+    "contextFile": ".cline/プロジェクト説明.md",
     "importantFiles": [
       "fizzbuzz.py",
       "temp_script.py", 
@@ -278,32 +299,32 @@ web_app/
       "database.py"
     ],
     "fileAliases": {
-      "backup_old.py": "Main Authentication Module",
-      "test123.py": "External API Integration",
-      "temp.py": "Payment Processing Core"
+      "backup_old.py": "メイン認証モジュール",
+      "test123.py": "外部API連携",
+      "temp.py": "決済処理コア"
     }
   }
 }
 ```
 
-### 推奨ファイル構成
+### 推奨フォルダ構成
 
 ```text
 project/
 ├── .cline/
-│   ├── project-context.md     # メインの設定
-│   ├── file-mappings.json     # ファイル名→機能のマッピング
-│   └── common-tasks.md        # よくある作業パターン
+│   ├── プロジェクト説明.md         # メインの設定
+│   ├── ファイル対応表.json        # ファイル名→機能のマッピング
+│   └── よくある作業.md            # よくある作業パターン
 ├── .vscode/
-│   └── settings.json          # VSCode/Cline設定
+│   └── settings.json             # VSCode/Cline設定
 └── [既存のプロジェクトファイル群]
 ```
 
 ### チーム運用ルール
 
-1. **重要ファイルの追加時**: `.cline/project-context.md`を更新
+1. **重要ファイルの追加時**: `.cline/プロジェクト説明.md`を更新
 2. **ファイル名変更時**: マッピング情報を更新  
-3. **月1回**: コンテキストファイルの見直し
+3. **月一回**: 設定ファイルの見直し
 
 ## 制限事項
 
