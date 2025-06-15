@@ -4,6 +4,11 @@
         "ms-python.mypy-type-checker",  // python 型チェック
         "ms-python.python",  // python 環境
         "ms-python.debugpy",  // python デバッグ用
-        "charliermarsh.ruff"  // python lint formatter用
+        "charliermarsh.ruff",  // python lint formatter用
+        
+        "shd101wyy.markdown-preview-enhanced",  // markdown preview
+        "davidanson.vscode-markdownlint",   // markdown lint
+        "hediet.vscode-drawio", // draw.io
+        "takumii.markdowntable" // markdown table
     ]
 }

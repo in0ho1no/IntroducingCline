@@ -23,5 +23,31 @@
 		},
 		
 		"autoDocstring.docstringFormat": "google",
+		
+		// markdown settings
+		"[markdown]": {
+			"editor.wordWrap":"on",
+			"editor.wordSeparators": "./\\()\"'-:,.;<>~!@# ○$%^&*|+=[]{}`~?．。，、（）「」［］｛｝《》『』【】てにをはがのともへでや",
+			"editor.quickSuggestions": {
+				"other": true,
+				"comments": false,
+				"strings": false
+			},
+			"editor.snippetSuggestions": "top",
+			"editor.scrollBeyondLastLine": false,
+			"editor.padding.bottom": 250,
+		},
+
+		// 画像コピペ時の保存先指定
+		"markdown.copyFiles.destination": {
+			"**/*": "img/"
+		},
+		
+		// Markdown Preview Enhanced
+		"markdown-preview-enhanced.breakOnSingleNewLine": false,
+		"markdown-preview-enhanced.scrollSync": false,
+		"markdown-preview-enhanced.mathRenderingOption": "MathJax",
+		"markdown-preview-enhanced.automaticallyShowPreviewOfMarkdownBeingEdited": true,
+		"markdown-preview-enhanced.plantumlJarPath":"C:/Users/${env:USERNAME}/.vscode/extensions/jebbs.plantuml-2.18.1/plantuml.jar"
 	}
 }
